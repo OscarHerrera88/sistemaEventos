@@ -1,6 +1,7 @@
 package dao;
 
 import conexion.ConexionBD;
+import excepciones.DatoInvalidoException;
 import interfaces.Crud;
 import modelos.Evento;
 import excepciones.EventoNoEncontradoException;
@@ -49,7 +50,7 @@ public class EventoDao implements Crud<Evento, String> {
     }
 
     @Override
-    public ArrayList<Evento> listar() throws SQLException {
+    public ArrayList<Evento> listar() {
         ArrayList<Evento> lista = new ArrayList<>();
         String sql = "select * from evento order by fecha,hora";
 
@@ -81,24 +82,136 @@ public class EventoDao implements Crud<Evento, String> {
 
             ps.executeUpdate();
             ps.close();
-            
 
-        } catch (SQLException e) {
+        } catch (SQLException | DatoInvalidoException e) {
             System.out.println("Error al crear evento: " + e.getMessage());
         }
         return lista;
     }
 
     @Override
-    public Evento buscarPorId(String id) throws SQLException, EventoNoEncontradoException {
+    public Evento buscarPorId(String id) {
+        String sql = "select * from eventos where idevento=?";
+        try {
+            Connection conexion = ConexionBD.obtenerConexion();
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
 
+            if (rs.next()) {
+                Evento evento = new Evento(
+                        rs.getString("idevento"),
+                        rs.getString("codigo"),
+                        rs.getString("nombre"),
+                        rs.getString("descripcion"),
+                        rs.getDate("fecha").toLocalDate(),
+                        rs.getTime("hora").toLocalTime(),
+                        rs.getInt("duracionhoras"),
+                        rs.getInt("capacidadmaxima"),
+                        rs.getDouble("costo"),
+                        rs.getString("estado"),
+                        rs.getString("idtipoevento"),
+                        rs.getString("idmodalidadevento"),
+                        rs.getString("idubicacion"),
+                        rs.getString("idorganizador")
+                );
+                rs.close();
+                ps.close();
+                return evento;
+
+            }
+
+        } catch (SQLException | DatoInvalidoException e) {
+            System.out.println("Error al buscar evento " + e.getMessage());
+        }
+        return null;
     }
 
     @Override
-    public void actualizar(Evento evento) throws SQLException, EventoNoEncontradoException {
+    public void actualizar(Evento evento) {
+        String sql = "update evento set codigo=?, nombre=?,descripcion=?,fecha=?,hora=?,duracionhoras=?,"
+                + "capacidadmaxima=?,costo=?,estado=?,idtipoevento=?,idmodalidadevento=?,idubicacion=?,idorganizador";
+
+        try {
+            Connection conexion = ConexionBD.obtenerConexion();
+            PreparedStatement ps = conexion.prepareStatement(sql);
+
+            ps.setString(1, evento.getIdEvento());
+            ps.setString(2, evento.getCodigo());
+            ps.setString(3, evento.getNombre());
+            ps.setString(4, evento.getDescripcion());
+
+            ps.setDate(5, java.sql.Date.valueOf(evento.getFecha()));
+            ps.setTime(6, java.sql.Time.valueOf(evento.getHora()));
+
+            ps.setInt(7, evento.getDuracionHoras());
+            ps.setInt(8, evento.getCapacidadMaxima());
+            ps.setDouble(9, evento.getCosto());
+            ps.setString(10, evento.getEstado());
+            ps.setString(11, evento.getIdTipoEvento());
+            ps.setString(12, evento.getIdModalidadEvento());
+            ps.setString(13, evento.getIdUbicacion());
+            ps.setString(14, evento.getIdOrganizador());
+            ps.executeUpdate();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println("Error al buscar evento " + e.getMessage());
+        }
     }
 
     @Override
-    public void eliminar(String id) throws SQLException, EventoNoEncontradoException {
+    public void eliminar(String id) {
+        String sql = "delete from evento where idevento=?";
+
+        try {
+            Connection conexion = ConexionBD.obtenerConexion();
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ps.setString(1, id);
+            int filas = ps.executeUpdate();
+            if (filas == 0) {
+                System.out.println("no se encontro el evento a eliminar");
+            } else {
+                System.out.println("Evento eliminado con exito");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Error al buscar evento " + e.getMessage());
+        }
+    }
+
+    public ArrayList<Evento> listarProgramados() {
+        ArrayList<Evento> lista = new ArrayList<>();
+        String sql = "select * from evento where estado= 'programado'order by fecha,hora";
+
+        try {
+            Connection conexion = ConexionBD.obtenerConexion();
+            PreparedStatement ps = conexion.prepareStatement(sql);
+            ResultSet rs = ps.executeQuery();
+            while (rs.next()) {
+                Evento evento = new Evento(
+                        rs.getString("idevento"),
+                        rs.getString("codigo"),
+                        rs.getString("nombre"),
+                        rs.getString("descripcion"),
+                        rs.getDate("fecha").toLocalDate(),
+                        rs.getTime("hora").toLocalTime(),
+                        rs.getInt("duracionhoras"),
+                        rs.getInt("capacidadmaxima"),
+                        rs.getDouble("costo"),
+                        rs.getString("estado"),
+                        rs.getString("idtipoevento"),
+                        rs.getString("idmodalidadevento"),
+                        rs.getString("idubicacion"),
+                        rs.getString("idorganizador")
+                );
+                lista.add(evento);
+            }
+            rs.close();
+            ps.close();
+
+        } catch (SQLException |DatoInvalidoException e) {
+            System.out.println("Error al crear evento " + e.getMessage());
+        }
+        return lista;
     }
 }

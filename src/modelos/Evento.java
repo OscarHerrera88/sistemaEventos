@@ -1,6 +1,8 @@
 package modelos;
 
 import excepciones.DatoInvalidoException;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 public class Evento {
 
@@ -8,8 +10,8 @@ public class Evento {
     private String codigo;
     private String nombre;
     private String descripcion;
-    private String fecha;
-    private String hora;
+    private LocalDate fecha;
+    private LocalTime hora;
     private int duracionHoras;
     private int capacidadMaxima;
     private double costo;
@@ -24,7 +26,7 @@ public class Evento {
     }
 
     public Evento(String idEvento, String codigo, String nombre, String descripcion,
-            String fecha, String hora, int duracionHoras, int capacidadMaxima, double costo,
+            LocalDate fecha, LocalTime hora, int duracionHoras, int capacidadMaxima, double costo,
             String estado, String idTipoEvento, String idModalidadEvento, String idUbicacion,
             String idOrganizador) throws DatoInvalidoException {
 
@@ -89,26 +91,26 @@ public class Evento {
                 this.descripcion = descripcion.trim();
     }
 
-    public String getFecha() {
+    public LocalDate getFecha() {
         return fecha;
     }
 
-    public void setFecha(String fecha) throws DatoInvalidoException {
-        if (fecha == null || fecha.trim().isEmpty()) {
+    public void setFecha(LocalDate fecha) throws DatoInvalidoException {
+        if (fecha == null ) {
             throw new DatoInvalidoException("La fecha del evento no puede estar vacio");
         }
-        this.fecha = fecha.trim();
+        this.fecha = fecha;
     }
 
-    public String getHora() {
+    public LocalTime getHora() {
         return hora;
     }
 
-    public void setHora(String hora) throws DatoInvalidoException {
-        if (hora == null || hora.trim().isEmpty()) {
+    public void setHora(LocalTime hora) throws DatoInvalidoException {
+        if (hora == null ) {
             throw new DatoInvalidoException("La hora del evento no puede estar vacio");
         }
-        this.hora = hora.trim();
+        this.hora = hora;
     }
 
     public int getDuracionHoras() {
@@ -200,7 +202,7 @@ public class Evento {
     }
 
     @Override
-    public String toString() {
+    public String mostrarInformacion() {
         return "Evento{" + "idEvento=" + 
                 idEvento + ", codigo=" 
                 + codigo + ", nombre=" 
