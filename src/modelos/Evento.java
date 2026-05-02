@@ -66,7 +66,7 @@ public class Evento {
             throw new DatoInvalidoException("El codigo del evento no puede estar vacio");
         }
         this.codigo = codigo.trim();
-        
+
     }
 
     public String getNombre() {
@@ -88,7 +88,7 @@ public class Evento {
         if (descripcion == null || descripcion.trim().isEmpty()) {
             throw new DatoInvalidoException("La descripcion del evento no puede estar vacio");
         }
-                this.descripcion = descripcion.trim();
+        this.descripcion = descripcion.trim();
     }
 
     public LocalDate getFecha() {
@@ -96,7 +96,7 @@ public class Evento {
     }
 
     public void setFecha(LocalDate fecha) throws DatoInvalidoException {
-        if (fecha == null ) {
+        if (fecha == null) {
             throw new DatoInvalidoException("La fecha del evento no puede estar vacio");
         }
         this.fecha = fecha;
@@ -107,7 +107,7 @@ public class Evento {
     }
 
     public void setHora(LocalTime hora) throws DatoInvalidoException {
-        if (hora == null ) {
+        if (hora == null) {
             throw new DatoInvalidoException("La hora del evento no puede estar vacio");
         }
         this.hora = hora;
@@ -118,8 +118,8 @@ public class Evento {
     }
 
     public void setDuracionHoras(int duracionHoras) throws DatoInvalidoException {
-        if(duracionHoras<=0){
-        throw new DatoInvalidoException("La duracion debe ser mayor a 0");
+        if (duracionHoras <= 0) {
+            throw new DatoInvalidoException("La duracion debe ser mayor a 0");
         }
         this.duracionHoras = duracionHoras;
     }
@@ -129,8 +129,8 @@ public class Evento {
     }
 
     public void setCapacidadMaxima(int capacidadMaxima) throws DatoInvalidoException {
-        if(capacidadMaxima<=0){
-        throw new DatoInvalidoException("La capacidad maxima debe ser mayor a 0");
+        if (capacidadMaxima <= 0) {
+            throw new DatoInvalidoException("La capacidad maxima debe ser mayor a 0");
         }
         this.capacidadMaxima = capacidadMaxima;
     }
@@ -140,8 +140,8 @@ public class Evento {
     }
 
     public void setCosto(double costo) throws DatoInvalidoException {
-        if(costo<=0){
-        throw new DatoInvalidoException("El costo debe ser mayor a 0");
+        if (costo <= 0) {
+            throw new DatoInvalidoException("El costo debe ser mayor a 0");
         }
         this.costo = costo;
     }
@@ -164,7 +164,7 @@ public class Evento {
     public void setIdTipoEvento(String idTipoEvento) throws DatoInvalidoException {
         if (idTipoEvento == null || idTipoEvento.trim().isEmpty()) {
             throw new DatoInvalidoException("El id tipo evento no puede estar vacio");
-        }        
+        }
         this.idTipoEvento = idTipoEvento.trim();
     }
 
@@ -201,23 +201,27 @@ public class Evento {
         this.idOrganizador = idOrganizador.trim();
     }
 
-    @Override
     public String mostrarInformacion() {
-        return "Evento{" + "idEvento=" + 
-                idEvento + ", codigo=" 
-                + codigo + ", nombre=" 
-                + nombre + ", descripcion=" 
-                + descripcion + ", fecha=" 
-                + fecha + ", hora=" + hora 
-                + ", duracionHoras=" + duracionHoras 
-                + ", capacidadMaxima=" + capacidadMaxima 
-                + ", costo=" + costo 
-                + ", estado=" + estado 
-                + ", idTipoEvento=" + idTipoEvento 
-                + ", idModalidadEvento=" + idModalidadEvento 
-                + ", idUbicacion=" + idUbicacion 
-                + ", idOrganizador=" + idOrganizador + '}';
+        return """
+               
+                <<<<INFORMACION DEL EVENTO>>>>
+               ID Evento        :""" + idEvento
+                + "\nCodigo           :" + idEvento
+                + "\nNombre           :" + nombre
+                + "\nDescripcion      :" + descripcion
+                + "\nFecha            :" + fecha
+                + "\nHora             :" + hora
+                + "\nDuracion         :" + duracionHoras + " horas"
+                + "\nCapacidad maxima :" + capacidadMaxima + " personas"
+                + "\nCosto            :$" + costo
+                + "\nEstado           :" + estado
+                + "\nTipo de evento   :" + idTipoEvento
+                + "\nModalidad        :"+idModalidadEvento
+                + "\nUbicacion        :"+idUbicacion
+                + "\nOrganizador      :"+idOrganizador
+                + "\n====================";
     }
 
+   
+
 }
-                                                            

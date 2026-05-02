@@ -23,12 +23,14 @@ public class Main {
         int opcion;
         do {
             System.out.println("<<<MENU EVENTOS>>>");
+            System.out.println(">>>>>NOMBRE: OSCAR JAVIER HERRERA CALDERON<<<<<");
             System.out.println("1. Crear evento");
             System.out.println("2. Editar evento");
-            System.out.println("3. Eliminar evento");
+            System.out.println("3. Cancelar evento");
             System.out.println("4. Mostrar todos los eventos");
             System.out.println("5. Mostrar eventos programados");
-            System.out.println("6. Buscar evento por ID");
+            System.out.println("6. Mostrar eventos cancelados");
+            System.out.println("7. Buscar evento por ID");
             System.out.println("0. Salir");
 
             opcion = Entrada.leerEntero("Seleccione una opcion");
@@ -41,7 +43,7 @@ public class Main {
                     editarEvento();
                     break;
                 case 3:
-                    eliminarEvento();
+                    cancelarEvento();
                     break;
                 case 4:
                     mostrarEventos();
@@ -50,6 +52,9 @@ public class Main {
                     mostrarEventosProgramados();
                     break;
                 case 6:
+                    mostrarEventosCancelados();
+                    break;
+                case 7:
                     buscarEvento();
                     break;
                 case 0:
@@ -79,7 +84,7 @@ public class Main {
             double costo = Entrada.leerDouble("Ingrese el costo: ");
             String estado = Entrada.leerTexto("Ingrese el estado: ");
             String idTipoEvento = Entrada.leerTexto("Ingrese el id tipo de evento");
-            String idModalidadEvento = Entrada.leerTexto("Ingrese la modalidad del evento: ");
+            String idModalidadEvento = Entrada.leerTexto("Ingrese id de la modalidad del evento: ");
             String idUbicacion = Entrada.leerTexto("Ingrese id de la ubicacion evento: ");
             String idOrganizador = Entrada.leerTexto("Ingrese id organizador: ");
 
@@ -113,7 +118,7 @@ public class Main {
             double costo = Entrada.leerDouble("Ingrese el nuevo costo: ");
             String estado = Entrada.leerTexto("Ingrese el nuevo estado: ");
             String idTipoEvento = Entrada.leerTexto("Ingrese el nuevo id tipo de evento");
-            String idModalidadEvento = Entrada.leerTexto("Ingrese la nueva modalidad del evento: ");
+            String idModalidadEvento = Entrada.leerTexto("Ingrese el id de la nueva modalidad del evento: ");
             String idUbicacion = Entrada.leerTexto("Ingrese id de la nueva ubicacion evento: ");
             String idOrganizador = Entrada.leerTexto("Ingrese el nuevo id organizador: ");
 
@@ -130,12 +135,10 @@ public class Main {
 
     }
 
-    private static void eliminarEvento() {
+    private static void cancelarEvento() {
         try {
-            String idEvento = Entrada.leerTexto("Ingrese id del evento a eliminar: ");
+            String idEvento = Entrada.leerTexto("Ingrese id del evento a cancelar: ");
             eventoServicio.eliminar(idEvento);
-            System.out.println("Evento eliminado correctamente");
-
         } catch (EventoNoEncontradoException e) {
             System.out.println("Error, " + e.getMessage());
         }
@@ -154,8 +157,36 @@ public class Main {
     }
 
     private static void mostrarEventosProgramados() {
+        ArrayList<Evento> eventos = eventoServicio.listarProgramados();
+
+        if (eventos.isEmpty()) {
+            System.out.println("No hay eventos programados");
+        } else {
+            for (Evento evento : eventos) {
+                System.out.println(evento.mostrarInformacion());
+            }
+        }
+
     }
 
     private static void buscarEvento() {
+        try {
+            String idEvento = Entrada.leerTexto("Ingrese el id del evento a buscar");
+            Evento evento = eventoServicio.buscarPorId(idEvento);
+            System.out.println(evento.mostrarInformacion());
+        } catch (EventoNoEncontradoException e) {
+            System.out.println("Error, " + e.getMessage());
+        }
+    }
+
+    private static void mostrarEventosCancelados() {
+        ArrayList<Evento> eventos = eventoServicio.listarCancelados();
+        if (eventos.isEmpty()) {
+            System.out.println("No hay eventos registrados");
+        } else {
+            for (Evento evento : eventos) {
+                System.out.println(evento.mostrarInformacion());
+            }
+        }
     }
 }

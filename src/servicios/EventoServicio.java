@@ -29,6 +29,10 @@ public class EventoServicio {
         return eventoDao.listarProgramados();
     }
 
+    public ArrayList<Evento> listarCancelados() {
+        return eventoDao.listarCancelados();
+    }
+
     public Evento buscarPorId(String id) throws EventoNoEncontradoException {
         Evento evento = eventoDao.buscarPorId(id);
         if (evento == null) {
@@ -53,7 +57,7 @@ public class EventoServicio {
         Evento existente = eventoDao.buscarPorId(id);
         if (existente == null) {
             throw new EventoNoEncontradoException("No se encontro el evento para eliminar");
-        }    
+        }
         eventoDao.eliminar(id);
     }
 }
